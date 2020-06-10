@@ -1,18 +1,23 @@
-# Fabric Example Mod
+# Stop Hiding
 
-Draylar's fork of the fabric-example-mod. Changes package structure to my usual one.
+A Fabric version of [FindMe](https://www.curseforge.com/minecraft/mc-mods/findme), which allows you to find items in nearby inventories by hovering over them and pressing the *T* key (configurable). 
 
-## Setup
+![](https://i.imgur.com/w4dXIOk.png)
 
-1. Edit build.gradle and mod.json to suit your needs.
-    * The "mixins" object can be removed from mod.json if you do not need to use mixins.
-    * Please replace all occurences of "modid" with your own mod ID - sometimes, a different string may also suffice.
-2. Run the following command:
+Note that this mod is required on the client and server due to the way inventories work.
 
-```
-./gradlew idea
-```
+### Configuration
 
-## License
+To change the key used to search nearby inventories, look in your control settings:
+![](https://i.imgur.com/4rD0eoY.png)
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+More configuration options can be found at `config/stophiding.json5`:
+
+- `searchRange` - Range to search for inventories within. Only valid on the server. Note that larger ranges may result in server lag.
+- `displayResults`- Whether a message should be displayed above the hotbar on the client with search results.
+- `highlightTime` - The time, in ticks, that a highlighted block takes to disappear.
+
+
+### License
+
+This mod is licensed under CC0 1.0.
