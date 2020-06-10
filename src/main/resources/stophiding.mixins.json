@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "draylar.stophiding.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+
+  ],
+  "client": [
+    "WorldRendererMixin",
+    "ContainerScreenMixin",
+    "RenderPhaseAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,37 +1,37 @@
 
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "stophiding",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Stop Hiding",
+  "description": "Stop Hiding allows you to find items in nearby inventories by hovering over them and pressing the T key.",
   "authors": [
-    "Me!"
+    "Draylar"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/Draylar/stop-hiding",
+    "sources": "https://github.com/Draylar/stop-hiding"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/stophiding/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.github.draylar.modid.ExampleMod"
+      "draylar.stophiding.StopHiding"
+    ],
+    "client": [
+      "draylar.stophiding.StopHidingClient"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "stophiding.mixins.json"
   ],
 
-  "requires": {
+  "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": "*"
-  },
-  "suggests": {
-    "flamingo": "*"
   }
 }
