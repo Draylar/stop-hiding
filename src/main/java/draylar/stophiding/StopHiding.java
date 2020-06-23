@@ -11,11 +11,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -56,7 +56,7 @@ public class StopHiding implements ModInitializer {
 					}
 
 					if (!foundPositions.isEmpty()) {
-						player.closeContainer();
+						player.closeHandledScreen();
 
 						// get long blockpos array
 						ArrayList<Long> longFoundPositions = new ArrayList<>();
@@ -107,8 +107,8 @@ public class StopHiding implements ModInitializer {
 			int count = 0;
 
 			// iterate over inventory stacks
-			for (int i = 0; i < inventory.getInvSize(); i++) {
-				ItemStack stack = inventory.getInvStack(i);
+			for (int i = 0; i < inventory.size(); i++) {
+				ItemStack stack = inventory.getStack(i);
 
 				if (stack.getItem() == item) {
 					count += stack.getCount();

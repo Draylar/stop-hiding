@@ -22,7 +22,7 @@ public interface RenderPhaseAccessor {
     }
 
     @Accessor
-    static RenderPhase.Layering getPROJECTION_LAYERING() {
+    static RenderPhase.Layering getVIEW_OFFSET_Z_LAYERING() {
         throw new UnsupportedOperationException();
     }
 }

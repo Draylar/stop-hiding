@@ -10,16 +10,16 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.ContainerScreen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.container.Slot;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
@@ -42,7 +42,7 @@ public class StopHidingClient implements ClientModInitializer {
             RenderLayer.MultiPhaseParameters
                     .builder()
                     .lineWidth(new RenderPhase.LineWidth(OptionalDouble.empty()))
-                    .layering(RenderPhaseAccessor.getPROJECTION_LAYERING())
+                    .layering(RenderPhaseAccessor.getVIEW_OFFSET_Z_LAYERING())
                     .transparency(RenderPhaseAccessor.getTRANSLUCENT_TRANSPARENCY())
                     .writeMaskState(RenderPhaseAccessor.getCOLOR_MASK())
                     .depthTest(RenderPhaseAccessor.getALWAYS_DEPTH_TEST())
@@ -58,17 +58,17 @@ public class StopHidingClient implements ClientModInitializer {
 
     private void registerKeybindHandlers() {
         ClientTickCallback.EVENT.register(tick -> {
-            if(InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), KeyBindings.STOP_HIDING.getBoundKey().getKeyCode())) {
+            if(InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), KeyBindings.STOP_HIDING.getDefaultKey().getCode())) {
                 MinecraftClient client = MinecraftClient.getInstance();
 
-                if(client.currentScreen instanceof ContainerScreen) {
-                    ContainerScreen containerScreen = (ContainerScreen) client.currentScreen;
+                if(client.currentScreen instanceof HandledScreen) {
+                    HandledScreen containerScreen = (HandledScreen) client.currentScreen;
                     Slot focusedSlot = ((ContainerScreenMixin) containerScreen).getFocusedSlot();
 
                     if(client.player.inventory.getCursorStack().isEmpty() && focusedSlot != null && focusedSlot.hasStack()) {
                         PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer());
                         byteBuf.writeString(Registry.ITEM.getId(focusedSlot.getStack().getItem()).toString());
-                        latestItem = new TranslatableText(focusedSlot.getStack().getItem().getTranslationKey()).asFormattedString();
+                        latestItem = new TranslatableText(focusedSlot.getStack().getItem().getTranslationKey()).asString();
                         CustomPayloadC2SPacket packet = new CustomPayloadC2SPacket(StopHiding.SERVER_PACKET, byteBuf);
                         ClientSidePacketRegistry.INSTANCE.sendToServer(packet);
                     }
@@ -96,9 +96,9 @@ public class StopHidingClient implements ClientModInitializer {
 
             if(StopHiding.CONFIG.displayResults) {
                 if (found > 0) {
-                    MinecraftClient.getInstance().player.addChatMessage(new LiteralText(String.format("Found %d %ss across %d %s", found, latestItem, size, size > 1 ? "inventories." : "inventory.")), true);
+                    MinecraftClient.getInstance().player.sendMessage(new LiteralText(String.format("Found %d %ss across %d %s", found, latestItem, size, size > 1 ? "inventories." : "inventory.")), true);
                 } else {
-                    MinecraftClient.getInstance().player.addChatMessage(new LiteralText("Not in any nearby inventories."), true);
+                    MinecraftClient.getInstance().player.sendMessage(new LiteralText("Not in any nearby inventories."), true);
                 }
             }
         }));
